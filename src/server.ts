@@ -62,7 +62,7 @@ export default async function startServer(portToListenOn = config.server.port) {
               rewardsWalletBal,
               deployerWalletBal,
               lockedWalletBal,
-              liquidityWalletBal,
+              // liquidityWalletBal,
             ] = await Promise.all([
               mtgyCont.methods.totalSupply().call(),
               mtgyCont.methods.decimals().call(),
@@ -71,7 +71,7 @@ export default async function startServer(portToListenOn = config.server.port) {
               mtgyCont.methods.balanceOf(rewardsWallet).call(),
               mtgyCont.methods.balanceOf(deployerAddress).call(),
               mtgyCont.methods.balanceOf(lockedAddress1).call(),
-              mtgyCont.methods.balanceOf(liquidityAddress).call(),
+              // mtgyCont.methods.balanceOf(liquidityAddress).call(),
             ]);
             res.send(
               getBalance(totalSupply, decimals)
@@ -80,7 +80,7 @@ export default async function startServer(portToListenOn = config.server.port) {
                 .minus(getBalance(rewardsWalletBal, decimals))
                 .minus(getBalance(deployerWalletBal, decimals))
                 .minus(getBalance(lockedWalletBal, decimals))
-                .minus(getBalance(liquidityWalletBal, decimals))
+                // .minus(getBalance(liquidityWalletBal, decimals))
                 .toString()
             );
           } catch (err) {
