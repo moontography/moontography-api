@@ -16,7 +16,8 @@ const devWallet = "0x3A3ffF4dcFCB7a36dADc40521e575380485FA5B8";
 const rewardsWallet = "0x87644cB97C1e2Cc676f278C88D0c4d56aC17e838";
 const deployerAddress = "0x2d1b8ba4a49c0338a301bd16ff43e4a6d2604dc3";
 const lockedAddress1 = "0x2d045410f002a95efcee67759a92518fa3fce677";
-const liquidityAddress = "0xaabafd64feb2ec235b209a95d4dc9b08e225379c";
+// const liquidityAddress = "0xaabafd64feb2ec235b209a95d4dc9b08e225379c";
+const multisig = "0x4045B2022ae566E38776c2fF2E5C66FF96a9f028";
 
 export default async function startServer(portToListenOn = config.server.port) {
   return await new Promise((resolve, reject) => {
@@ -63,6 +64,7 @@ export default async function startServer(portToListenOn = config.server.port) {
               deployerWalletBal,
               lockedWalletBal,
               // liquidityWalletBal,
+              multisigBal,
             ] = await Promise.all([
               mtgyCont.methods.totalSupply().call(),
               mtgyCont.methods.decimals().call(),
@@ -72,6 +74,7 @@ export default async function startServer(portToListenOn = config.server.port) {
               mtgyCont.methods.balanceOf(deployerAddress).call(),
               mtgyCont.methods.balanceOf(lockedAddress1).call(),
               // mtgyCont.methods.balanceOf(liquidityAddress).call(),
+              mtgyCont.methods.balanceOf(multisig).call(),
             ]);
             res.send(
               getBalance(totalSupply, decimals)
@@ -81,9 +84,10 @@ export default async function startServer(portToListenOn = config.server.port) {
                 .minus(getBalance(deployerWalletBal, decimals))
                 .minus(getBalance(lockedWalletBal, decimals))
                 // .minus(getBalance(liquidityWalletBal, decimals))
+                .minus(getBalance(multisigBal, decimals))
                 .toString()
             );
-          } catch (err) {
+          } catch (err: any) {
             res.status(500).json({ error: err.stack });
           }
         }
